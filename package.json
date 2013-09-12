@@ -1,0 +1,18 @@
+{
+  "name": "CS558-Assignment1",
+  "version": "0.0.0",
+  "description": "Simple Physics Simulator",
+  "main": "simulator.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/andrewseidl/CS558-Assignment1.git"
+  },
+  "author": "Andrew Seidl",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/andrewseidl/CS558-Assignment1/issues"
+  }
+}
