@@ -109,7 +109,7 @@ function simulator(position, velocity, ground, dt) {
     }
 
 
-    console.log("Position: " + nextPosition + " Velocity: " + nextVelocity)
+    //console.log("Position: " + nextPosition + " Velocity: " + nextVelocity)
 
     return {
         position: nextPosition,
