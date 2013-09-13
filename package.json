@@ -4,7 +4,7 @@
   "description": "Simple Physics Simulator",
   "main": "simulator.js",
   "scripts": {
-    "test": "node test/test.js"
+    "test": "node test/*.js"
   },
   "repository": {
     "type": "git",
