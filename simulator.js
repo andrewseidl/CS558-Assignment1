@@ -2,6 +2,7 @@
 // NOTE: assuming convex polygon for the container
 var Iterator = require("iterator").Iterator
 var vectors = require("vectors")
+var eqs = require("eqsolver")
 
 var add = vectors.add(2)
   , mult = vectors.mult(2)
@@ -38,14 +39,14 @@ function simulator(position, velocity, ground, dt) {
             // check if point is inside polygon
         for (var j =0; j < poly.length; j++) {
             var p1 = poly[j].slice(0)
-            var p2 = poly[(j+1)%poly.length]
-            var v1 = p2.slice(0)
-            var v2 = p2.slice(0)
+            var p2 = poly[(j+1)%poly.length].slice(0)
+            var v1 = copy(p2)
+            var v2 = copy(p2)
 
             sub(v1, p1)
             sub(v2, nextPosition[i])
 
-            if (cross(v1, v2) > 0) {
+            if (cross(copy(v1), v2) > 0) {
                 // TODO: better logging framework/see if console has 'debug'/'info' streams
                 // more 'informational'/'debug' than typical log
                 console.log("    Point:   " + nextPosition[i] + "\n    Crosses: " + p1 + "\n             " + p2) 
@@ -55,19 +56,25 @@ function simulator(position, velocity, ground, dt) {
                 var B = -(p2[0] - p1[0])
                 var C = -A * p1[0] - B * p1[0]
 
-                var M = Math.sqrt(A*A + B*B)
+                var D = B
+                var E = -A
 
-                var Ap = A/M
-                var Bp = B/M
-                var Cp = C/M
+                var F = -D*nextPosition[i][0] - E*nextPosition[i][1]
 
-                var D = Ap * nextPosition[i][0] + Bp * nextPosition[i][1] + Cp
+                lhs = [[A,B,0],[D,E,0],[0,0,0]]
+                rhs = [-C,-F,0]
 
-                nextPosition[i][0] -= 2 * Ap * D
-                nextPosition[i][1] -= 2 * Bp * D
+                console.log(rhs)
+                console.log(lhs)
+                var np = eqs(lhs,rhs)
+                //np = rhs
+                console.log("moo: " + np.b)
+
+                nextPosition[i][0] = 2*np.a - nextPosition[i][0]
+                nextPosition[i][1] = 2*np.b - nextPosition[i][1]
 
                 var V = nextVelocity[i].slice(0)
-
+       
                 var N = normalize([-A, -B])
                 // 'vectors' seems a bit ugly
                 mult(N,dot(N,V)/dot(N,N))
