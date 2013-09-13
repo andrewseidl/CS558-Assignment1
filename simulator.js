@@ -1,3 +1,5 @@
+// TODO: styleguide, should these be in the function?
+// NOTE: assuming convex polygon for the container
 var Iterator = require("iterator").Iterator
 var vectors = require("vectors")
 
@@ -44,6 +46,8 @@ function simulator(position, velocity, ground, dt) {
             sub(v2, nextPosition[i])
 
             if (cross(v1, v2) > 0) {
+                // TODO: better logging framework/see if console has 'debug'/'info' streams
+                // more 'informational'/'debug' than typical log
                 console.log("    Point:   " + nextPosition[i] + "\n    Crosses: " + p1 + "\n             " + p2) 
                 //mirror the point across the line
                 //from: http://stackoverflow.com/questions/8954326/how-to-calculate-the-mirror-point-along-a-line
@@ -66,10 +70,12 @@ function simulator(position, velocity, ground, dt) {
 
                 var N = normalize([-A, -B])
                 // 'vectors' seems a bit ugly
-                mult(N,dot(N,V)/dot(V,V))
+                mult(N,dot(N,V)/dot(N,N))
                 mult(N,2)
                 sub(nextVelocity[i], N)
                 //mult(nextVelocity[i],-1)
+                
+                console.log("    New Velocity: " + nextVelocity[i] + "\n")
 
                 j = 0 //we've moved the point, need to recheck to make sure we don't cross any other sides
             }
