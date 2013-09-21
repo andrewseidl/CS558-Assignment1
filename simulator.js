@@ -38,14 +38,19 @@ function intersection(s1, e1, s2, e2) {
 
 
 
-function simulator(position, velocity, ground, dt) {
+function simulator(position, velocity, ground, dt, poly, polyHasGround) {
+
+    polyHasGround = polyHasGround || false
+
 
     // points on the polygon defining the box
     // this should probably be passed in
-    var poly = [ [ 1, 1 ],
-                 [-1, 1 ],
-                 [-1, ground[0] *  1 / ground[1] ],
-                 [ 1, ground[0] * -1 / ground[1] ] ];
+    poly = poly || [[1,1],[-1,1]];
+
+    if (!polyHasGround) {
+        poly.push([-1, ground[0] *  1 / ground[1] ]);
+        poly.push([ 1, ground[0] * -1 / ground[1] ]);
+    }
 
 
     var nextPosition = new Array(position.length);
