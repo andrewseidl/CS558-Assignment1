@@ -12,9 +12,10 @@ var polyHasGround = false
 var nstate = sim(position, velocity, ground, dt, poly, polyHasGround)
 
 var myCanvas = document.body.querySelector("#visuals")
+var velocs = document.body.querySelector("#velocity")
 
-myCanvas.width = document.body.clientWidth / 2
-myCanvas.height = document.body.clientHeight
+myCanvas.width = 400
+myCanvas.height = 400
 
 topLeft = [-1, 1] //needed to switch to Canvas' coord system
 
@@ -35,7 +36,7 @@ context.stroke();
 }
 
 function drawPoints() {
-    requestAnimationFrame(drawPoints)
+    //requestAnimationFrame(drawPoints)
     context.clearRect(0,0,myCanvas.width,myCanvas.height)
         drawBox()
     nstate = sim(position, velocity, ground, dt, poly.slice(0), polyHasGround)
@@ -47,7 +48,8 @@ function drawPoints() {
         context.arc(scale*(nstate.position[i][0]-topLeft[0]),scale*(topLeft[1]-nstate.position[i][1]),10,0,2*Math.PI);
         //context.arc(100,100,10,0,2*Math.PI);
         context.closePath();
+        velocs.innerHTML = nstate.velocity[i]
     }
 }
 
-setInterval(drawPoints,8000)
+setInterval(drawPoints,1000*dt)
