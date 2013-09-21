@@ -45,7 +45,7 @@ function simulator(position, velocity, ground, dt, poly, polyHasGround) {
 
     // points on the polygon defining the box
     // this should probably be passed in
-    poly = poly || [[1,1],[-1,1]];
+    poly = poly.slice(0) || [[1,1],[-1,1]];
 
     if (!polyHasGround) {
         poly.push([-1, ground[0] *  1 / ground[1] ]);
@@ -118,6 +118,7 @@ function simulator(position, velocity, ground, dt, poly, polyHasGround) {
 
     return {
         position: nextPosition,
-        velocity: nextVelocity
+        velocity: nextVelocity,
+        poly: poly
     }
 }
