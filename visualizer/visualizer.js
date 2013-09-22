@@ -20,6 +20,7 @@ var stepField = document.body.querySelector("#stepField")
 var polyField = document.body.querySelector("#polyField")
 var resetBtn = document.body.querySelector("#reset")
 var scaleField = document.body.querySelector("#scaleField")
+var enableGround = document.body.querySelector("#enableGround")
 
 posField.value = position
 velField.value = velocity
@@ -118,6 +119,8 @@ function resetSim() {
     var ply = parseField(polyField.value);
     dt = stepField.value.match(/-?[\d\.]+/)[0];
     scale = scaleField.value.match(/-?[\d\.]+/)[0];
+
+    polyHasGround = !enableGround.checked
 
     var n = Math.min(pos.length, vel.length);
 
