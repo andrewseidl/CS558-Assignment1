@@ -9,11 +9,20 @@ var dt       = 0.1
 var poly = [[1,1],[-1,1]]
 var polyHasGround = false
 
-var nstate = sim(position, velocity, ground, dt, poly, polyHasGround)
+//var nstate = sim(position, velocity, ground, dt, poly, polyHasGround)
 
 var myCanvas = document.body.querySelector("#visuals")
-var velocs = document.body.querySelector("#velocity")
-var posField = document.body.querySelector("#positions")
+
+var posField = document.body.querySelector("#posField")
+var velField = document.body.querySelector("#velField")
+var gndField = document.body.querySelector("#gndField")
+var stepField = document.body.querySelector("#stepField")
+var resetBtn = document.body.querySelector("#reset")
+
+posField.value = position
+velField.value = velocity.slice(0)
+    gndField.value = ground
+    stepField.value = dt
 
 myCanvas.width = 400
 myCanvas.height = 400
@@ -23,8 +32,6 @@ topLeft = [-1, 1] //needed to switch to Canvas' coord system
 var scale = 200; //scale up from sim coords, FIXME should be dynamic
 
 var context = myCanvas.getContext("2d")
-
-console.log(nstate.poly.length)
 
 function drawBox() {
     context.beginPath()
@@ -51,14 +58,13 @@ function drawPoint(point) {
 function drawPoints() {
     //requestAnimationFrame(drawPoints)
     context.clearRect(0,0,myCanvas.width,myCanvas.height);
-    drawBox();
     nstate = sim(position, velocity, ground, dt, poly.slice(0), polyHasGround);
+    drawBox();
     position = nstate.position;
     velocity = nstate.velocity;
 
     for (var i=0; i < nstate.position.length; i++) {
         drawPoint(transformCoords(nstate.position[i][0], nstate.position[i][1], scale, topLeft))
-        velocs.innerHTML = nstate.velocity[i]
     }
 }
 
@@ -76,9 +82,6 @@ function checkPositions(event) {
     clearInterval(simulate);
     console.log("Cleared")
     context.clearRect(0,0,myCanvas.width,myCanvas.height);
-    context.clearRect(0,0,myCanvas.width,myCanvas.height);
-    context.clearRect(0,0,myCanvas.width,myCanvas.height);
-    context.clearRect(0,0,myCanvas.width,myCanvas.height);
     drawBox();
     data = parseField(posField.value)
     for (var i=0; i < data.length; i++) {
@@ -86,5 +89,30 @@ function checkPositions(event) {
     }
 }
 
+function resetSim() {
+    clearInterval(simulate);
+    console.log("Resetting");
+    context.clearRect(0,0,myCanvas.width,myCanvas.height);
+
+    var pos = parseField(posField.value);
+    var vel = parseField(velField.value);
+    var gnd = parseField(gndField.value);
+    dt = stepField.value.match(/-?[\d\.]+/)[0];
+
+    var n = Math.min(pos.length, vel.length);
+
+    position.length = 0;
+    velocity.length = 0;
+
+    for (var i=0; i < n; i++) {
+        position[i] = [1*pos[i][0], 1*pos[i][1]];
+        velocity[i] = [1*vel[i][0], 1*vel[i][1]];
+    }
+    ground = [gnd[0][0], gnd[0][1]]
+
+    simulate = setInterval(drawPoints,1000*dt)
+}
+
+resetBtn.addEventListener("click",resetSim)
 posField.addEventListener("change",checkPositions)
 
