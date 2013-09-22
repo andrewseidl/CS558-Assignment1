@@ -4,7 +4,7 @@ var sim = require("../simulator.js")
 var position = [[0, 0.1]]
 var velocity = [[1, 1.0]]
 var ground   = [0, 1]
-var dt       = 0.1
+var dt       = 0.01
 
 var poly = [[1,1],[-1,1]]
 var polyHasGround = false
@@ -19,12 +19,17 @@ var gndField = document.body.querySelector("#gndField")
 var stepField = document.body.querySelector("#stepField")
 var polyField = document.body.querySelector("#polyField")
 var resetBtn = document.body.querySelector("#reset")
+var scaleField = document.body.querySelector("#scaleField")
 
 posField.value = position
 velField.value = velocity
 gndField.value = ground
 stepField.value = dt
 polyField.value = poly
+
+var scale = 200; //scale up from sim coords
+
+scaleField.value = scale
 
 myCanvas.width = 400
 myCanvas.height = 400
@@ -38,7 +43,6 @@ function calcCorners(poly) {
     bottomRight = [Math.max.apply(null,x), Math.min.apply(null,y)]
 }
 
-var scale = 200; //scale up from sim coords
 
 var context = myCanvas.getContext("2d")
 
@@ -46,9 +50,7 @@ function drawBox() {
     calcCorners(nstate.poly)
 
     myCanvas.width = (-topLeft[0]+bottomRight[0])*scale
-    console.log(myCanvas.width)
     myCanvas.height = (+topLeft[1]-bottomRight[1])*scale
-    console.log(myCanvas.height)
 
     context.beginPath()
     for (var i=0; i < nstate.poly.length; i++) {
@@ -115,6 +117,7 @@ function resetSim() {
     var gnd = parseField(gndField.value);
     var ply = parseField(polyField.value);
     dt = stepField.value.match(/-?[\d\.]+/)[0];
+    scale = scaleField.value.match(/-?[\d\.]+/)[0];
 
     var n = Math.min(pos.length, vel.length);
 
