@@ -46,9 +46,7 @@ function drawBox() {
     calcCorners(nstate.poly)
 
     myCanvas.width = (-topLeft[0]+bottomRight[0])*scale
-    console.log(myCanvas.width)
     myCanvas.height = (+topLeft[1]-bottomRight[1])*scale
-    console.log(myCanvas.height)
 
     context.beginPath()
     for (var i=0; i < nstate.poly.length; i++) {
